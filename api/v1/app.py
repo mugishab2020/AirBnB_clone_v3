@@ -5,6 +5,9 @@ import os
 from flask import Flask, jsonify, make_response
 from models import storage
 from api.v1.views import app_views
+"""
+    the module where app starts from
+"""
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
@@ -16,10 +19,11 @@ def teardown(exception):
     """closes the SQLAchemy session"""
     storage.close()
 
-#@app.errorhandler(404)
-#def not_found(error):
+
+@app.errorhandler(404)
+def not_found(error):
     """ returning the status error msg in json """
- #   return make_response(jsonify({"error": "Not found"}), 404)
+    return make_response(jsonify({"error": "Not found"}), 404)
 
 
 if __name__ == "__main__":
