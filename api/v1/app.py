@@ -1,13 +1,10 @@
 #!/usr/bin/python3
 """ importing the needed moules """
-
 import os
 from flask import Flask, jsonify, make_response
 from models import storage
 from api.v1.views import app_views
-"""
-    the module where app starts from
-"""
+
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
