@@ -8,19 +8,22 @@ from models.state import State
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
-def get_user(id=None):
+def get_state(state_id=None):
     """a function to retrieve user from the database"""
-    if id is None:
+    if state_id is None:
         states = storage.all(State)
         state_list = [state.to_dict() for state in states.values()]
         return jsonify(state_list)
-    return jsonify(storage.all("State", id))
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
+    return jsonify(state.to_dict())
 
 
 @app_views.route('states/<state_id>', methods=['DELETE'], strict_slashes=False)
-def delete_user(id=None):
+def delete_state(state_id=None):
     """a function that delete the object db"""
-    state = storage.get("State", id)
+    state = storage.get("State", state_id)
     if state is not None:
         storage.delete(state)
         storage.save()
@@ -29,7 +32,7 @@ def delete_user(id=None):
 
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
-def post_user():
+def post_state():
     """a function to create state"""
     data = request.get_json()
     if not data:
